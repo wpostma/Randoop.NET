@@ -9,6 +9,7 @@
 //
 //*********************************************************
 
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,9 +23,12 @@ using System.Security.Policy;
 using System.Security.Permissions;
 using System.Runtime.Remoting;
 
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 namespace RandoopTests
 {
-    class SourceCodeGenerationTests
+    [TestClass]
+    public class SourceCodeGenerationTests
     {
         private static readonly string DATA = "C:\\WINDOWS\\Microsoft.NET\\Framework\\v2.0.50727\\System.Data.dll";
         private static readonly string XML = "C:\\WINDOWS\\Microsoft.NET\\Framework\\v2.0.50727\\System.XML.dll";
@@ -33,23 +37,31 @@ namespace RandoopTests
         private static readonly string MSCORLIB = "C:\\WINDOWS\\Microsoft.NET\\Framework\\v2.0.50727\\mscorlib.dll";
         private static readonly string WEB = "C:\\WINDOWS\\Microsoft.NET\\Framework\\v2.0.50727\\System.Web.dll";
 
+        private static readonly string hello = "C:\\dev\\Randoop.NET\\ClassLibrary1\\ClassLibrary1\\bin\\Debug\\ClassLibrary1.dll";
 
-        public static void Test()
+
+        [TestMethod]
+        public void TestAgainstSomeMicrosoftDotNetFrameworkAssemblies()
         {
-            TestTypeGeneration();
-            Test(DATA);
-            Test(XML);
-            Test(SECURITY);
-            Test(DRAWING);
-            Test(MSCORLIB);
-            Test(WEB);
+            // Load some MS .NET 2.0 assemblies and fuzz them.
+            //Test(DATA);
+            //Test(XML);
+            //Test(SECURITY);
+            //Test(DRAWING);
+            //Test(MSCORLIB);
+            //Test(WEB);
+
+            // Test a small sample .net 4 assembly
+            Test(hello);
+
         }
 
-        public static void Test(string dll)
+        public void Test(string dll)
         {
             string workingDirectory = Common.TempDir.CreateTempDir();
             StringBuilder args = new StringBuilder();
-            args.Append("/dontexecute /noexplorer /outputnormal /noexplorer /timelimit:100");
+            //args.Append("/dontexecute /noexplorer /outputnormal /noexplorer /timelimit:100");
+            args.Append(" /timelimit:40");
             args.Append(" " + dll);
             Process p = Util.RunRandoop(args.ToString(), workingDirectory);
             if (p.ExitCode != 0)
@@ -60,14 +72,17 @@ namespace RandoopTests
                 throw new TestFailedException(msg.ToString());
             }
 
+            /*
+
             p = Util.CompileTests(new DirectoryInfo(workingDirectory));
             if (p.ExitCode != 0)
             {
                 StringBuilder msg = new StringBuilder();
-                msg.Append("*** Compilation of randoop-generated tests failed.");
-                msg.Append("DLL: " + dll + ", WORKING DIRECTORY: " + workingDirectory);
+                msg.Append("*** Compilation of randoop-generated tests failed with exit code "+p.ExitCode.ToString()+" \n");
+                msg.Append("Using .net assembly " + dll + ", WORKING DIRECTORY: " + workingDirectory);
                 throw new TestFailedException(msg.ToString());
             }
+            */
 
             Console.WriteLine("Deleting temporary directory " + workingDirectory);
             new DirectoryInfo(workingDirectory).Delete(true);
@@ -90,7 +105,8 @@ namespace RandoopTests
             }
         }
 
-        public static void TestTypeGeneration()
+        [TestMethod]
+        public void TestTypeGeneration()
         {
             Type t = typeof(A<int>.B<string, Dictionary<int, List<int>>>.D<float>);
             string expected = "RandoopTests.SourceCodeGenerationTests.A<System.Int32>.B<System.String, System.Collections.Generic.Dictionary<System.Int32, System.Collections.Generic.List<System.Int32>>>.D<System.Single>";

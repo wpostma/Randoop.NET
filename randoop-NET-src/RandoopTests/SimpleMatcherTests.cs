@@ -15,59 +15,65 @@ using System.Text;
 using Common;
 using System.Diagnostics;
 
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 namespace RandoopTests
 {
-    class SimpleMatcherTests
+    [TestClass]
+    public class SimpleMatcherTests
     {
-        internal static void Test()
+        [TestMethod]
+
+        public void TestWildcardMatcher()
         {
             string matcher;
             
             matcher = "foo";
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, "foo"));
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, "f oo"));
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, " foo"));
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, " foo "));
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, "foo "));
-            Common.Util.Assert(false == WildcardMatcher.Matches(matcher, "fooa"));
-            Common.Util.Assert(false == WildcardMatcher.Matches(matcher, "afoo"));
-            Common.Util.Assert(false == WildcardMatcher.Matches(matcher, "a foo"));
+            
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, "foo"));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, "f oo"));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, " foo"));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, " foo "));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, "foo "));
+            Assert.IsTrue(false == WildcardMatcher.Matches(matcher, "fooa"));
+            Assert.IsTrue(false == WildcardMatcher.Matches(matcher, "afoo"));
+            Assert.IsTrue(false == WildcardMatcher.Matches(matcher, "a foo"));
 
             matcher = "*foo";
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, "foo"));
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, "fo o"));
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, " foo "));
-            Common.Util.Assert(false == WildcardMatcher.Matches(matcher, "fooa"));
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, "afoo"));
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, "af oo"));
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, " afoo"));
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, " af oo"));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, "foo"));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, "fo o"));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, " foo "));
+            Assert.IsTrue(false == WildcardMatcher.Matches(matcher, "fooa"));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, "afoo"));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, "af oo"));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, " afoo"));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, " af oo"));
 
             matcher = "foo*";
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, "foo"));
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, " foo "));
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, "fooa"));
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, "fooa "));
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, "fo oa "));
-            Common.Util.Assert(false == WildcardMatcher.Matches(matcher, "afoo"));
-            Common.Util.Assert(false == WildcardMatcher.Matches(matcher, "afo o"));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, "foo"));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, " foo "));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, "fooa"));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, "fooa "));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, "fo oa "));
+            Assert.IsTrue(false == WildcardMatcher.Matches(matcher, "afoo"));
+            Assert.IsTrue(false == WildcardMatcher.Matches(matcher, "afo o"));
 
             matcher = "*foo*";
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, "foo"));
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, " foo "));
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, "fooa"));
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, "afoo"));
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, "afoob"));
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, "a f o o b"));
-            Common.Util.Assert(false == WildcardMatcher.Matches(matcher, "afocob"));
-            Common.Util.Assert(false == WildcardMatcher.Matches(matcher, "a f o c o b"));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, "foo"));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, " foo "));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, "fooa"));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, "afoo"));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, "afoob"));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, "a f o o b"));
+            Assert.IsTrue(false == WildcardMatcher.Matches(matcher, "afocob"));
+            Assert.IsTrue(false == WildcardMatcher.Matches(matcher, "a f o c o b"));
 
             matcher = "fo|*|o*";
-            Common.Util.Assert(false == WildcardMatcher.Matches(matcher, "fo*"));
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, "fo*o"));
-            Common.Util.Assert(true == WildcardMatcher.Matches(matcher, "fo*oa"));
-            Common.Util.Assert(false == WildcardMatcher.Matches(matcher, "foao"));
-            Common.Util.Assert(false == WildcardMatcher.Matches(matcher, "foaoa"));
+            Assert.IsTrue(false == WildcardMatcher.Matches(matcher, "fo*"));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, "fo*o"));
+            Assert.IsTrue(true == WildcardMatcher.Matches(matcher, "fo*oa"));
+            Assert.IsTrue(false == WildcardMatcher.Matches(matcher, "foao"));
+            Assert.IsTrue(false == WildcardMatcher.Matches(matcher, "foaoa"));
         }
     }
 }

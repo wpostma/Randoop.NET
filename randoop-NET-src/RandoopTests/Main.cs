@@ -15,9 +15,7 @@ using System.Text;
 
 namespace RandoopTests
 {
-    /// <summary>
-    /// Run all randoop tests.
-    /// </summary>
+    /*
     class RandoopTests
     {
         public static void Main()
@@ -26,4 +24,6 @@ namespace RandoopTests
             SourceCodeGenerationTests.Test();
         }
     }
+    */
+
 }

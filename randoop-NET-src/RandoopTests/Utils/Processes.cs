@@ -19,6 +19,16 @@ using System.IO;
 
 namespace RandoopTests
 {
+    public class MissingExecutableException : ApplicationException
+    {
+
+        public MissingExecutableException(string message) : base(message)
+        {
+
+        }
+
+    }
+
     public class Util
     {
 
@@ -48,6 +58,9 @@ namespace RandoopTests
 
             Process p = new Process();
             p.StartInfo.FileName = Common.Enviroment.RandoopExe;
+            if (String.IsNullOrEmpty(p.StartInfo.FileName))
+                if (workingDirectory == null) throw new MissingExecutableException("");
+
             p.StartInfo.Arguments = args;
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.ErrorDialog = true;
